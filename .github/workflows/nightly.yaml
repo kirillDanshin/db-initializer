@@ -1,0 +1,35 @@
+name: Run tests and build nightly version
+env:
+  REGISTRY: docker.pkg.github.com
+on:
+  push:
+
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    name: Run tests
+    steps:
+      - run: |
+          go test -v
+  publish:
+    runs-on: ubuntu-20.04
+    needs: test
+    name: Build and publish docker image
+    steps:
+      - name: Set repository env
+        run: |
+          LOWER_REPO=$(echo "${{ format('{0}/db-initializer', github.repository) }}" | tr '[:upper:]' '[:lower:]')
+          echo "::set-env name=REPOSITORY::${LOWER_REPO}"
+      - uses: actions/checkout@v2
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+          registry: ${{ env.REGISTRY }}
+          repository: ${{ env.REPOSITORY }}
+          cache_froms: ${{ format('{0}/{1}', env.REGISTRY, env.REPOSITORY) }}
+          tags: latest
+          tag_with_ref: true
+          tag_with_sha: true
