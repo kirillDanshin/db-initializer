@@ -1,0 +1,5 @@
+db-initializer
+.idea
+.vscode
+*.out
+.git

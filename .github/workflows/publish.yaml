@@ -1,0 +1,26 @@
+---
+name: Release docker image
+env:
+  REGISTRY: docker.pkg.github.com
+  REPOSITORY: ${{ format('{0}/db-initializer', github.repository) }}
+on:
+  release:
+    types: [released]
+
+jobs:
+  publish:
+    runs-on: ubuntu-20.04
+    name: Build and publish docker image
+    steps:
+      - run: actions/checkout@2
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+          registry: ${{ env.REGISTRY }}
+          repository: ${{ env.REPOSITORY }}
+          cache_froms: ${{ format('{0}/{1}', env.REGISTRY, env.REPOSITORY) }}
+          tags: latest
+          tag_with_ref: true
+          tag_with_sha: true
