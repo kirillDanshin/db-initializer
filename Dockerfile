@@ -4,7 +4,7 @@ COPY . /db-initializer
 
 WORKDIR /db-initializer
 
-RUN go build
+RUN CGO_ENABLED=0 go build
 
 FROM alpine:latest
 

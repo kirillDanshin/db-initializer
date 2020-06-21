@@ -3,3 +3,4 @@ db-initializer
 .vscode
 *.out
 .git
+Dockerfile
