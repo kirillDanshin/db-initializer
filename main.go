@@ -143,7 +143,7 @@ func initDatabases(clientset *kubernetes.Clientset, params *parameters) {
 		return
 	}
 
-	if secret.StringData == nil || secret.StringData["dsn"] == "" {
+	if secret.Data == nil || string(secret.Data["dsn"]) == "" {
 		zap.L().Error(
 			"could not init database: secret must have stringData with a non-empty 'dsn' field in format supported by github.com/gobuffalo/pop",
 			zap.String("namespace", params.Namespace),
@@ -151,7 +151,7 @@ func initDatabases(clientset *kubernetes.Clientset, params *parameters) {
 		return
 	}
 
-	dsn := secret.StringData["dsn"]
+	dsn := string(secret.Data["dsn"])
 	if strings.HasPrefix(dsn, "sqlite") {
 		zap.L().Error(
 			"sqlite initialization is not supported",
