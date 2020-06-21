@@ -130,7 +130,7 @@ func getParamsFromAnnotations(nsName string, annotations map[string]string) (*pa
 }
 
 func initDatabases(clientset *kubernetes.Clientset, params *parameters) {
-	secret, err := clientset.CoreV1().Secrets(params.Namespace).Get(context.Background(), params.SecretName, metav1.GetOptions{})
+	secret, err := clientset.CoreV1().Secrets(params.SecretNamespace).Get(context.Background(), params.SecretName, metav1.GetOptions{})
 	if err != nil {
 		zap.L().Error(
 			"could not get secret to initialize databases",
