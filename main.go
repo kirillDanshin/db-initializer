@@ -123,6 +123,8 @@ func getParamsFromAnnotations(nsName string, annotations map[string]string) (*pa
 			"using 'default' namespace as no secretNamespace were provided",
 			zap.String("namespace", params.Namespace),
 		)
+	}
+	if params.SecretNamespace == "" {
 		params.SecretNamespace = "default"
 	}
 
