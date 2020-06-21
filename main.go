@@ -178,6 +178,7 @@ func initDatabases(clientset *kubernetes.Clientset, params *parameters) {
 	}
 	for _, dbName := range params.DBNames {
 		deets.Database = dbName
+		deets.Finalize()
 		conn, err := pop.NewConnection(deets)
 
 		if err != nil {
