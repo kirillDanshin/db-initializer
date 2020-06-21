@@ -193,7 +193,6 @@ func initDatabases(clientset *kubernetes.Clientset, params *parameters) {
 			)
 			return
 		}
-		defer conn.Close()
 
 		err = pop.CreateDB(conn)
 		if err != nil {
