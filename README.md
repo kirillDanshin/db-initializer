@@ -35,7 +35,7 @@ stringData:
 ### 2. Apply the manifest
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kirillDanshin/db-initializer/deployment/combined.yaml
+kubectl apply -f https://raw.githubusercontent.com/kirillDanshin/db-initializer/master/deployment/combined.yaml
 ```
 
 ### 3. Create dsn secret
