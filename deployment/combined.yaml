@@ -1,0 +1,76 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: db-initializer
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: db-initializer
+  name: db-initializer
+  namespace: db-initializer
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/name: db-initializer
+  name: db-initializer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: db-initializer
+subjects:
+- kind: ServiceAccount
+  name: db-initializer
+  namespace: db-initializer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: db-initializer
+  name: db-initializer
+  namespace: db-initializer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: db-initializer
+  template:
+    metadata:
+      labels:
+        name: db-initializer
+    spec:
+      imagePullSecrets:
+      - name: image-pull-secret-github
+      containers:
+      - imagePullPolicy: Always
+        name: db-initializer
+        image: docker.pkg.github.com/kirilldanshin/db-initializer/db-initializer:v0.1.11
+        resources:
+          limits:
+            memory: 80M
+            cpu: 100m
+          requests:
+            memory: 50M
+            cpu: 50m
+      restartPolicy: Always
+      serviceAccountName: db-initializer
