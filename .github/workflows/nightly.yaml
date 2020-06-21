@@ -31,5 +31,4 @@ jobs:
           repository: ${{ env.REPOSITORY }}
           cache_froms: ${{ format('{0}/{1}', env.REGISTRY, env.REPOSITORY) }}
           tags: nightly
-          tag_with_ref: true
           tag_with_sha: true
