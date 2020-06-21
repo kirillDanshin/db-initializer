@@ -117,7 +117,8 @@ func getParamsFromAnnotations(nsName string, annotations map[string]string) (*pa
 
 	params := res.Interface().(*parameters)
 	params.Namespace = nsName
-	if params.SecretNamespace == "" {
+	ok := checkRequirements(params)
+	if ok && params.SecretNamespace == "" {
 		zap.L().Info(
 			"using 'default' namespace as no secretNamespace were provided",
 			zap.String("namespace", params.Namespace),
@@ -125,7 +126,7 @@ func getParamsFromAnnotations(nsName string, annotations map[string]string) (*pa
 		params.SecretNamespace = "default"
 	}
 
-	return params, checkRequirements(params)
+	return params, ok
 }
 
 func initDatabases(clientset *kubernetes.Clientset, params *parameters) {
