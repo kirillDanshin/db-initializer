@@ -177,7 +177,9 @@ func initDatabases(clientset *kubernetes.Clientset, params *parameters) {
 		return
 	}
 	for _, dbName := range params.DBNames {
-		deets.Database = dbName
+		deets = &pop.ConnectionDetails{
+			URL: strings.Replace(dsn, "placeholderdb", dbName, 1),
+		}
 		deets.Finalize()
 		conn, err := pop.NewConnection(deets)
 
